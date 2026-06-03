@@ -348,7 +348,7 @@
             <span class="kw">return</span> self._balance</pre>
 
     <div class="card">
-      <h3>Deadlock prevention — ordered lock acquisition</h3>
+      <h3>Deadlock prevention: Ordered lock acquisition</h3>
       <p>The <code>transfer()</code> function always acquires the two account locks in a globally consistent order (by <code>account_number</code>). This eliminates the circular-wait condition required for deadlock.</p>
     </div>
 
@@ -364,7 +364,7 @@
             destination._balance += amount</pre>
 
     <div class="card">
-      <h3>TransactionSimulator — concurrent load test</h3>
+      <h3>TransactionSimulator: Concurrent load test</h3>
       <p>Spins up configurable user threads, each performing random deposits, withdrawals, and transfers. Verifies that the total money in the system is conserved across all transactions.</p>
     </div>
 
@@ -397,12 +397,12 @@
   </section>
 
   <!-- ════════════════════════════════════════════════
-       ARTIFACT 1 — SOLID shopping system
+       ARTIFACT 1: SOLID shopping system
   ════════════════════════════════════════════════ -->
   <section class="section" id="artifact1">
     <div class="section-header">
       <span class="section-num">02</span>
-      <h2>Artifact 1 — SOLID Principles</h2>
+      <h2>Artifact 1: SOLID Principles</h2>
     </div>
 
     <p style="color:var(--ink-2); margin-bottom:1.25rem;">
@@ -437,13 +437,13 @@
       </div>
     </div>
 
-<pre><span class="cm"># Before — SRP / OCP / DIP violations</span>
+<pre><span class="cm"># Before: SRP / OCP / DIP violations</span>
 <span class="kw">class</span> <span class="cl">Order</span>:
     <span class="kw">def</span> <span class="fn">pay</span>(self, payment_type):
         <span class="kw">if</span> payment_type == <span class="st">"credit"</span>: ...   <span class="cm"># ← must edit to add new method</span>
         <span class="kw">elif</span> payment_type == <span class="st">"paypal"</span>: ...
 
-<span class="cm"># After — SOLID compliant</span>
+<span class="cm"># After: SOLID compliant</span>
 <span class="kw">class</span> <span class="cl">PaymentMethod</span>(ABC):
     <span class="de">@abstractmethod</span>
     <span class="kw">def</span> <span class="fn">pay</span>(self, amount: <span class="cl">float</span>) -&gt; <span class="cl">bool</span>: ...
@@ -460,12 +460,12 @@
   </section>
 
   <!-- ════════════════════════════════════════════════
-       ARTIFACT 2 — ShopEase architecture
+       ARTIFACT 2: ShopEase architecture
   ════════════════════════════════════════════════ -->
   <section class="section" id="artifact2">
     <div class="section-header">
       <span class="section-num">03</span>
-      <h2>Artifact 2 — ShopEase Architecture</h2>
+      <h2>Artifact 2: ShopEase Architecture</h2>
     </div>
 
     <p style="color:var(--ink-2); margin-bottom:1.25rem;">
@@ -475,15 +475,15 @@
     <div class="arch">
       <div class="arch-layer">
         <span class="layer-badge l-p">Presentation</span>
-        <p>ShopEaseCLI — delegates all logic to services; can be replaced by a REST controller or mobile app</p>
+        <p>ShopEaseCLI: delegates all logic to services; can be replaced by a REST controller or mobile app</p>
       </div>
       <div class="arch-layer">
         <span class="layer-badge l-b">Business Logic</span>
-        <p>AuthService, CatalogueService, OrderService — core rules, payment strategy, Observer event bus</p>
+        <p>AuthService, CatalogueService, OrderService: core rules, payment strategy, Observer event bus</p>
       </div>
       <div class="arch-layer">
         <span class="layer-badge l-d">Data Access</span>
-        <p>UserRepository, ProductRepository, OrderRepository — in-memory (swap for DB with zero business-logic changes)</p>
+        <p>UserRepository, ProductRepository, OrderRepository: in-memory (swap for DB with zero business-logic changes)</p>
       </div>
     </div>
 
@@ -493,7 +493,7 @@
     </div>
 
     <div class="card">
-      <h3>Observer pattern — extensible notifications</h3>
+      <h3>Observer pattern: Extensible notifications</h3>
       <p>An <code>EventBus</code> allows any number of listeners to subscribe to events (<code>order.placed</code>, <code>product.out_of_stock</code>, etc.) without modifying the publishers — demonstrating OCP at the architecture level.</p>
     </div>
 
@@ -506,12 +506,12 @@
   </section>
 
   <!-- ════════════════════════════════════════════════
-       ARTIFACT 3 — E-learning platform + TDD
+       ARTIFACT 3: E-learning platform + TDD
   ════════════════════════════════════════════════ -->
   <section class="section" id="artifact3">
     <div class="section-header">
       <span class="section-num">04</span>
-      <h2>Artifact 3 — Secure E-Learning Platform</h2>
+      <h2>Artifact 3: Secure E-Learning Platform</h2>
     </div>
 
     <p style="color:var(--ink-2); margin-bottom:1.25rem;">
@@ -526,7 +526,7 @@
     </div>
 
     <div class="card">
-      <h3>Architecture justification — layered monolith</h3>
+      <h3>Architecture justification: Layered monolith</h3>
       <p>A monolith is chosen over microservices for simplicity and ease of academic demonstration. The modules are loosely coupled via interfaces and repositories, making extraction to microservices straightforward if needed.</p>
     </div>
 
@@ -551,7 +551,7 @@
       </div>
     </div>
 
-<pre><span class="cm"># TDD — test written BEFORE implementation</span>
+<pre><span class="cm"># TDD: test written BEFORE implementation</span>
 <span class="kw">class</span> <span class="cl">TestUserManagement</span>(unittest.TestCase):
     <span class="kw">def</span> <span class="fn">test_register_stores_hashed_password</span>(self):
         u = self.service.register(<span class="st">"bob"</span>, <span class="st">"bob@edu.com"</span>, <span class="st">"Password1!"</span>)
@@ -565,12 +565,12 @@
   </section>
 
   <!-- ════════════════════════════════════════════════
-       ARTIFACT 4 — Dependency Injection
+       ARTIFACT 4: Dependency Injection
   ════════════════════════════════════════════════ -->
   <section class="section" id="artifact4">
     <div class="section-header">
       <span class="section-num">05</span>
-      <h2>Artifact 4 — Dependency Injection &amp; IoC</h2>
+      <h2>Artifact 4: Dependency Injection &amp; IoC</h2>
     </div>
 
     <p style="color:var(--ink-2); margin-bottom:1.25rem;">
@@ -592,20 +592,20 @@
 
     <div class="card" style="margin-top:1rem;">
       <h3>IoC Container (pure stdlib)</h3>
-      <p>A lightweight <code>DIContainer</code> class registers service factories and resolves them on demand, supporting singleton and transient lifetimes — replicating the core behaviour of <code>dependency-injector</code> without any external packages.</p>
+      <p>A lightweight <code>DIContainer</code> class registers service factories and resolves them on demand, supporting singleton and transient lifetimes, replicating the core behaviour of <code>dependency-injector</code> without any external packages.</p>
     </div>
 
-<pre><span class="cm"># Before — tightly coupled</span>
+<pre><span class="cm"># Before: tightly coupled</span>
 <span class="kw">class</span> <span class="cl">UserManager</span>:
     <span class="kw">def</span> <span class="fn">__init__</span>(self):
         self.notifier = <span class="cl">EmailService</span>()   <span class="cm"># ← hidden dependency, untestable</span>
 
-<span class="cm"># After — constructor injection</span>
+<span class="cm"># After:constructor injection</span>
 <span class="kw">class</span> <span class="cl">UserManager</span>:
     <span class="kw">def</span> <span class="fn">__init__</span>(self, notifier: <span class="cl">NotificationService</span>):
         self._notifier = notifier           <span class="cm"># ← injected; swap without editing class</span>
 
-<span class="cm"># Test — no real email sent</span>
+<span class="cm"># Test: no real email sent</span>
 <span class="kw">def</span> <span class="fn">test_register_sends_welcome_notification</span>(self):
     mock = <span class="cl">MockNotificationService</span>()
     mgr  = <span class="cl">UserManager</span>(notifier=mock)   <span class="cm"># inject mock</span>
@@ -633,7 +633,7 @@
 
     <div class="card">
       <h3>Key design decisions</h3>
-      <p><strong>RLock over Lock</strong> — reentrant locking prevents self-deadlock when internal methods call one another. <strong>Lock ordering</strong> in <code>transfer()</code> eliminates deadlock by ensuring consistent lock-acquisition order system-wide. <strong>Constructor injection</strong> throughout the codebase makes every class independently testable with zero test doubles required for dependencies not under test.</p>
+      <p><strong>RLock over Lock</strong> : reentrant locking prevents self-deadlock when internal methods call one another. <strong>Lock ordering</strong> in <code>transfer()</code> eliminates deadlock by ensuring consistent lock-acquisition order system-wide. <strong>Constructor injection</strong> throughout the codebase makes every class independently testable with zero test doubles required for dependencies not under test.</p>
     </div>
 
     <div class="stats">
