@@ -37,7 +37,7 @@ Implements `BankAccount` with `deposit()`, `withdraw()`, `get_balance()` and a `
 
 Key classes:
 - `BankAccount` : thread-safe account with audit log
-- `TransactionSimulator` : concurrent load tester
+- `TransactionSimulator` : concurrent load tester, verifies money is conserved
 - `transfer()` : deadlock-safe cross-account transfer
 
 ## Artifact 1 : SOLID Shopping System
