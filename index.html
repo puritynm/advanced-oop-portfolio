@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced OOP — E-Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:     #1a1814;
+    --ink-2:   #5c5750;
+    --ink-3:   #9e9890;
+    --paper:   #faf9f6;
+    --paper-2: #f0ede6;
+    --paper-3: #e5e0d5;
+    --accent:  #2d5a9b;
+    --accent-2:#4b7fc4;
+    --green:   #2a6b4a;
+    --green-bg:#edf5f0;
+    --amber:   #8a5a00;
+    --amber-bg:#fdf4e0;
+    --red:     #8b2020;
+    --red-bg:  #fdeaea;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --r: 6px;
+    --r-lg: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--paper);
+    border-bottom: 1px solid var(--paper-3);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 2rem; height: 52px;
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1rem; font-weight: 600;
+    color: var(--ink); text-decoration: none;
+    letter-spacing: -.01em;
+    white-space: nowrap;
+  }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; overflow-x: auto; }
+  .nav-links a {
+    font-size: 0.8rem; font-weight: 400; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--ink-2); text-decoration: none;
+    white-space: nowrap; padding: 4px 0;
+    border-bottom: 1.5px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  .nav-links a:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* ── Layout ── */
+  .wrapper { max-width: 900px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 5rem 0 3.5rem;
+    border-bottom: 1px solid var(--paper-3);
+    margin-bottom: 4rem;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--mono); font-size: 0.72rem;
+    color: var(--accent-2); letter-spacing: .08em; text-transform: uppercase;
+    background: #eef3fc; border-radius: var(--r);
+    padding: 3px 10px; margin-bottom: 1.25rem;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 300; line-height: 1.12;
+    color: var(--ink); letter-spacing: -.02em;
+    max-width: 700px; margin-bottom: 1.25rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero p {
+    font-size: 1.05rem; color: var(--ink-2); max-width: 580px;
+    margin-bottom: 2rem; font-weight: 300;
+  }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge {
+    font-family: var(--mono); font-size: 0.72rem;
+    padding: 4px 10px; border-radius: var(--r);
+    border: 1px solid var(--paper-3);
+    color: var(--ink-2);
+  }
+  .badge.pass { background: var(--green-bg); color: var(--green); border-color: #c2dfd0; }
+  .badge.warn { background: var(--amber-bg); color: var(--amber); border-color: #f0d9a0; }
+
+  /* ── Section titles ── */
+  .section { margin-bottom: 4rem; }
+  .section-header {
+    display: flex; align-items: baseline; gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--paper-3);
+  }
+  .section-num {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--ink-3);
+  }
+  .section-header h2 {
+    font-family: var(--serif);
+    font-size: 1.6rem; font-weight: 300; letter-spacing: -.01em;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: #fff;
+    border: 1px solid var(--paper-3);
+    border-radius: var(--r-lg);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .card h3 {
+    font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
+    margin-bottom: 0.5rem; color: var(--ink);
+  }
+  .card p { color: var(--ink-2); font-size: 0.9rem; }
+
+  /* ── Code blocks ── */
+  pre {
+    background: var(--ink);
+    color: #d4cfb8;
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    line-height: 1.7;
+    border-radius: var(--r-lg);
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+    position: relative;
+  }
+  .pre-label {
+    position: absolute; top: 0.75rem; right: 1rem;
+    font-family: var(--mono); font-size: 0.65rem;
+    color: #7a7462; letter-spacing: .06em; text-transform: uppercase;
+  }
+  .kw  { color: #cf9c5e; }
+  .st  { color: #98c379; }
+  .cm  { color: #5c6370; font-style: italic; }
+  .cl  { color: #e5c07b; }
+  .fn  { color: #61afef; }
+  .nu  { color: #d19a66; }
+  .de  { color: #c678dd; }
+
+  /* ── Principle grid ── */
+  .principle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px; margin: 1rem 0;
+  }
+  .principle {
+    background: var(--paper-2);
+    border-radius: var(--r);
+    padding: 0.85rem 1rem;
+  }
+  .principle .letter {
+    font-family: var(--mono); font-size: 1.4rem; font-weight: 500;
+    color: var(--accent-2); display: block; margin-bottom: 4px;
+  }
+  .principle .name { font-size: 0.78rem; font-weight: 500; color: var(--ink); }
+  .principle .desc { font-size: 0.74rem; color: var(--ink-2); margin-top: 2px; }
+
+  /* ── Test results ── */
+  .test-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1rem 0;
+  }
+  @media (max-width: 600px) { .test-grid { grid-template-columns: 1fr; } }
+  .test-group {
+    background: var(--paper-2); border-radius: var(--r);
+    padding: 0.85rem 1rem;
+  }
+  .test-group h4 { font-size: 0.78rem; font-weight: 500; margin-bottom: 6px; color: var(--ink); }
+  .test-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.72rem; font-family: var(--mono);
+    color: var(--ink-2); padding: 2px 0;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  .dot.warn { background: var(--amber); }
+
+  /* ── Stats row ── */
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px; margin: 1.25rem 0;
+  }
+  .stat {
+    background: var(--paper-2); border-radius: var(--r);
+    padding: 0.85rem 1rem;
+  }
+  .stat .val {
+    font-family: var(--serif); font-size: 2rem; font-weight: 300;
+    color: var(--accent); display: block; line-height: 1;
+  }
+  .stat .lbl { font-size: 0.72rem; color: var(--ink-3); margin-top: 4px; }
+
+  /* ── Architecture diagram ── */
+  .arch {
+    background: var(--paper-2); border-radius: var(--r-lg);
+    padding: 1.25rem; margin: 1rem 0;
+  }
+  .arch-layer {
+    background: #fff; border: 1px solid var(--paper-3);
+    border-radius: var(--r); padding: 0.65rem 1rem; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .arch-layer:last-child { margin-bottom: 0; }
+  .layer-badge {
+    font-family: var(--mono); font-size: 0.65rem; letter-spacing: .05em;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 4px;
+    flex-shrink: 0; white-space: nowrap;
+  }
+  .l-p { background: #eef3fc; color: var(--accent); }
+  .l-b { background: var(--green-bg); color: var(--green); }
+  .l-d { background: var(--amber-bg); color: var(--amber); }
+  .arch-layer p { font-size: 0.8rem; color: var(--ink-2); }
+
+  /* ── Inline code ── */
+  code {
+    font-family: var(--mono); font-size: 0.82em;
+    background: var(--paper-2); border-radius: 3px;
+    padding: 1px 5px; color: var(--accent);
+  }
+
+  /* ── DI diagram ── */
+  .di-diagram {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px; margin: 1rem 0;
+  }
+  .di-box {
+    border: 1px solid var(--paper-3); border-radius: var(--r);
+    padding: 0.5rem 1.25rem; font-size: 0.8rem; font-family: var(--mono);
+    text-align: center; background: #fff; white-space: nowrap;
+  }
+  .di-box.abstract { border-style: dashed; color: var(--accent); }
+  .di-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .di-arrow { font-size: 0.8rem; color: var(--ink-3); text-align: center; }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center; padding: 2rem;
+    font-size: 0.75rem; color: var(--ink-3);
+    border-top: 1px solid var(--paper-3);
+    font-family: var(--mono);
+  }
+
+  /* ── Print ── */
+  @media print {
+    nav { display: none; }
+    .wrapper { max-width: 100%; padding: 0 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">Advanced OOP Portfolio</a>
+  <ul class="nav-links">
+    <li><a href="#part1">Part 1</a></li>
+    <li><a href="#artifact1">Artifact 1</a></li>
+    <li><a href="#artifact2">Artifact 2</a></li>
+    <li><a href="#artifact3">Artifact 3</a></li>
+    <li><a href="#artifact4">Artifact 4</a></li>
+  </ul>
+</nav>
+
+<div class="wrapper">
+
+  <!-- ── Hero ── -->
+  <header class="hero">
+    <span class="hero-tag">Advanced Object-Oriented Programming</span>
+    <h1>Thread Safety, <em>SOLID Design</em>,<br>and Dependency Injection</h1>
+    <p>A complete e-portfolio demonstrating concurrent programming, secure architecture, and test-driven development in Python.</p>
+    <div class="badge-row">
+      <span class="badge pass">57 tests passing</span>
+      <span class="badge pass">Python 3.12</span>
+      <span class="badge">Threading &amp; Locks</span>
+      <span class="badge">SOLID Principles</span>
+      <span class="badge">TDD / unittest</span>
+      <span class="badge">Dependency Injection</span>
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════════════
+       PART 1 — Thread-safe banking system
+  ════════════════════════════════════════════════ -->
+  <section class="section" id="part1">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Thread-Safe Banking System</h2>
+    </div>
+
+    <p style="color:var(--ink-2); margin-bottom:1.25rem;">
+      A concurrent banking system that allows multiple users to perform deposits, withdrawals, and transfers simultaneously without race conditions or deadlocks.
+    </p>
+
+    <div class="stats">
+      <div class="stat"><span class="val">RLock</span><span class="lbl">Synchronisation primitive</span></div>
+      <div class="stat"><span class="val">O(1)</span><span class="lbl">Lock-ordered deadlock prevention</span></div>
+      <div class="stat"><span class="val">26</span><span class="lbl">Unit tests</span></div>
+      <div class="stat"><span class="val">50+</span><span class="lbl">Concurrent threads tested</span></div>
+    </div>
+
+    <div class="card">
+      <h3>BankAccount — thread-safe operations</h3>
+      <p>All public methods acquire an <code>RLock</code> before mutating state. An RLock is used instead of a plain Lock to allow the same thread to re-enter locked methods without self-deadlock.</p>
+    </div>
+
+<pre><span class="cm"># banking_system.py — core excerpt</span>
+<span class="kw">class</span> <span class="cl">BankAccount</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, account_number: <span class="cl">str</span>, initial_balance: <span class="cl">float</span> = <span class="nu">0.0</span>):
+        self.account_number = account_number
+        self._balance       = initial_balance
+        self._lock          = threading.RLock()   <span class="cm"># reentrant — safe for nested calls</span>
+        self._transaction_log: list[dict] = []
+
+    <span class="kw">def</span> <span class="fn">deposit</span>(self, amount: <span class="cl">float</span>) -&gt; <span class="cl">float</span>:
+        self._validate_amount(amount)
+        <span class="kw">with</span> self._lock:                          <span class="cm"># atomic read-modify-write</span>
+            self._balance += amount
+            self._log_transaction(<span class="st">"deposit"</span>, amount, self._balance)
+            <span class="kw">return</span> self._balance
+
+    <span class="kw">def</span> <span class="fn">withdraw</span>(self, amount: <span class="cl">float</span>) -&gt; <span class="cl">float</span>:
+        self._validate_amount(amount)
+        <span class="kw">with</span> self._lock:
+            <span class="kw">if</span> amount &gt; self._balance:
+                <span class="kw">raise</span> <span class="cl">InsufficientFundsError</span>(...)
+            self._balance -= amount
+            <span class="kw">return</span> self._balance</pre>
+
+    <div class="card">
+      <h3>Deadlock prevention — ordered lock acquisition</h3>
+      <p>The <code>transfer()</code> function always acquires the two account locks in a globally consistent order (by <code>account_number</code>). This eliminates the circular-wait condition required for deadlock.</p>
+    </div>
+
+<pre><span class="de">def</span> <span class="fn">transfer</span>(source: <span class="cl">BankAccount</span>, destination: <span class="cl">BankAccount</span>, amount: <span class="cl">float</span>):
+    <span class="cm"># Sort by account_number → always acquire in the same order</span>
+    first, second = (
+        (source, destination) <span class="kw">if</span> source.account_number &lt; destination.account_number
+        <span class="kw">else</span> (destination, source)
+    )
+    <span class="kw">with</span> first._lock:
+        <span class="kw">with</span> second._lock:           <span class="cm"># both held — transfer is atomic</span>
+            source._balance   -= amount
+            destination._balance += amount</pre>
+
+    <div class="card">
+      <h3>TransactionSimulator — concurrent load test</h3>
+      <p>Spins up configurable user threads, each performing random deposits, withdrawals, and transfers. Verifies that the total money in the system is conserved across all transactions.</p>
+    </div>
+
+    <div class="test-grid">
+      <div class="test-group">
+        <h4>Normal operations</h4>
+        <div class="test-item"><span class="dot"></span>default_balance_is_zero</div>
+        <div class="test-item"><span class="dot"></span>deposit_increases_balance</div>
+        <div class="test-item"><span class="dot"></span>withdraw_decreases_balance</div>
+        <div class="test-item"><span class="dot"></span>overdraft_raises</div>
+        <div class="test-item"><span class="dot"></span>exact_balance_withdrawal_succeeds</div>
+        <div class="test-item"><span class="dot"></span>log_records_deposit</div>
+      </div>
+      <div class="test-group">
+        <h4>Concurrency</h4>
+        <div class="test-item"><span class="dot"></span>concurrent_deposits_are_accurate</div>
+        <div class="test-item"><span class="dot"></span>concurrent_withdrawals_never_go_negative</div>
+        <div class="test-item"><span class="dot"></span>mixed_concurrent_transactions_preserve_total</div>
+        <div class="test-item"><span class="dot"></span>transfer_preserves_total</div>
+        <div class="test-item"><span class="dot"></span>simulator_runs_without_errors</div>
+        <div class="test-item"><span class="dot"></span>simulator_balances_are_non_negative</div>
+      </div>
+    </div>
+
+    <div class="badge-row" style="margin-top:1rem;">
+      <span class="badge pass">26 / 26 passing</span>
+      <span class="badge">banking_system.py</span>
+      <span class="badge">test_banking_system.py</span>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════
+       ARTIFACT 1 — SOLID shopping system
+  ════════════════════════════════════════════════ -->
+  <section class="section" id="artifact1">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Artifact 1 — SOLID Principles</h2>
+    </div>
+
+    <p style="color:var(--ink-2); margin-bottom:1.25rem;">
+      Refactoring a monolithic <code>Order</code> class into a clean design that satisfies all five SOLID principles, using an online shopping system as the domain.
+    </p>
+
+    <div class="principle-grid">
+      <div class="principle">
+        <span class="letter">S</span>
+        <div class="name">Single Responsibility</div>
+        <div class="desc">Order manages items only; PaymentMethod handles payments; DiscountStrategy applies discounts.</div>
+      </div>
+      <div class="principle">
+        <span class="letter">O</span>
+        <div class="name">Open / Closed</div>
+        <div class="desc">New payment methods (e.g. CryptoPayment) added without modifying existing classes.</div>
+      </div>
+      <div class="principle">
+        <span class="letter">L</span>
+        <div class="name">Liskov Substitution</div>
+        <div class="desc">CreditCard, PayPal, and Crypto all extend PaymentMethod and are interchangeable.</div>
+      </div>
+      <div class="principle">
+        <span class="letter">I</span>
+        <div class="name">Interface Segregation</div>
+        <div class="desc">PaymentMethod and DiscountStrategy are focused single-method abstractions.</div>
+      </div>
+      <div class="principle">
+        <span class="letter">D</span>
+        <div class="name">Dependency Inversion</div>
+        <div class="desc">Order depends on abstractions, not on EmailService or concrete payment classes.</div>
+      </div>
+    </div>
+
+<pre><span class="cm"># Before — SRP / OCP / DIP violations</span>
+<span class="kw">class</span> <span class="cl">Order</span>:
+    <span class="kw">def</span> <span class="fn">pay</span>(self, payment_type):
+        <span class="kw">if</span> payment_type == <span class="st">"credit"</span>: ...   <span class="cm"># ← must edit to add new method</span>
+        <span class="kw">elif</span> payment_type == <span class="st">"paypal"</span>: ...
+
+<span class="cm"># After — SOLID compliant</span>
+<span class="kw">class</span> <span class="cl">PaymentMethod</span>(ABC):
+    <span class="de">@abstractmethod</span>
+    <span class="kw">def</span> <span class="fn">pay</span>(self, amount: <span class="cl">float</span>) -&gt; <span class="cl">bool</span>: ...
+
+<span class="kw">class</span> <span class="cl">CryptoPayment</span>(<span class="cl">PaymentMethod</span>):          <span class="cm"># new — zero changes elsewhere</span>
+    <span class="kw">def</span> <span class="fn">pay</span>(self, amount: <span class="cl">float</span>) -&gt; <span class="cl">bool</span>: ...
+
+<span class="kw">class</span> <span class="cl">Order</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, discount: <span class="cl">DiscountStrategy</span>, payment: <span class="cl">PaymentMethod</span>): ...</pre>
+
+    <div class="badge-row" style="margin-top:1rem;">
+      <span class="badge">artifact1_solid_shopping.py</span>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════
+       ARTIFACT 2 — ShopEase architecture
+  ════════════════════════════════════════════════ -->
+  <section class="section" id="artifact2">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Artifact 2 — ShopEase Architecture</h2>
+    </div>
+
+    <p style="color:var(--ink-2); margin-bottom:1.25rem;">
+      A scalable, modular e-commerce system for ShopEase using a layered OOP architecture with the Observer, Strategy, and Repository patterns.
+    </p>
+
+    <div class="arch">
+      <div class="arch-layer">
+        <span class="layer-badge l-p">Presentation</span>
+        <p>ShopEaseCLI — delegates all logic to services; can be replaced by a REST controller or mobile app</p>
+      </div>
+      <div class="arch-layer">
+        <span class="layer-badge l-b">Business Logic</span>
+        <p>AuthService, CatalogueService, OrderService — core rules, payment strategy, Observer event bus</p>
+      </div>
+      <div class="arch-layer">
+        <span class="layer-badge l-d">Data Access</span>
+        <p>UserRepository, ProductRepository, OrderRepository — in-memory (swap for DB with zero business-logic changes)</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <h3>Security practices</h3>
+      <p>Passwords hashed with <strong>PBKDF2-HMAC-SHA256</strong> (260 000 iterations, per NIST SP 800-63B). Session tokens are random UUIDs. All comparisons use <code>hmac.compare_digest</code> to prevent timing attacks.</p>
+    </div>
+
+    <div class="card">
+      <h3>Observer pattern — extensible notifications</h3>
+      <p>An <code>EventBus</code> allows any number of listeners to subscribe to events (<code>order.placed</code>, <code>product.out_of_stock</code>, etc.) without modifying the publishers — demonstrating OCP at the architecture level.</p>
+    </div>
+
+    <div class="badge-row" style="margin-top:1rem;">
+      <span class="badge">artifact2_shopease.py</span>
+      <span class="badge">Observer Pattern</span>
+      <span class="badge">Repository Pattern</span>
+      <span class="badge">Dependency Injection</span>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════
+       ARTIFACT 3 — E-learning platform + TDD
+  ════════════════════════════════════════════════ -->
+  <section class="section" id="artifact3">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Artifact 3 — Secure E-Learning Platform</h2>
+    </div>
+
+    <p style="color:var(--ink-2); margin-bottom:1.25rem;">
+      A layered monolithic e-learning platform built with Test-Driven Development. Tests were written before implementation (Red → Green → Refactor cycle).
+    </p>
+
+    <div class="stats">
+      <div class="stat"><span class="val">3</span><span class="lbl">Core modules</span></div>
+      <div class="stat"><span class="val">21</span><span class="lbl">TDD unit tests</span></div>
+      <div class="stat"><span class="val">PBKDF2</span><span class="lbl">Password hashing</span></div>
+      <div class="stat"><span class="val">RBAC</span><span class="lbl">Role-based access</span></div>
+    </div>
+
+    <div class="card">
+      <h3>Architecture justification — layered monolith</h3>
+      <p>A monolith is chosen over microservices for simplicity and ease of academic demonstration. The modules are loosely coupled via interfaces and repositories, making extraction to microservices straightforward if needed.</p>
+    </div>
+
+    <div class="test-grid">
+      <div class="test-group">
+        <h4>User Management (TDD)</h4>
+        <div class="test-item"><span class="dot"></span>register_creates_user</div>
+        <div class="test-item"><span class="dot"></span>stores_hashed_password</div>
+        <div class="test-item"><span class="dot"></span>duplicate_username_raises</div>
+        <div class="test-item"><span class="dot"></span>invalid_email_raises</div>
+        <div class="test-item"><span class="dot"></span>correct_password_succeeds</div>
+        <div class="test-item"><span class="dot"></span>deactivated_user_raises</div>
+      </div>
+      <div class="test-group">
+        <h4>Course &amp; Enrolment</h4>
+        <div class="test-item"><span class="dot"></span>instructor_can_create_course</div>
+        <div class="test-item"><span class="dot"></span>student_cannot_create_course</div>
+        <div class="test-item"><span class="dot"></span>publish_marks_course_published</div>
+        <div class="test-item"><span class="dot"></span>enrol_student_succeeds</div>
+        <div class="test-item"><span class="dot"></span>double_enrolment_raises</div>
+        <div class="test-item"><span class="dot"></span>complete_on_100_percent</div>
+      </div>
+    </div>
+
+<pre><span class="cm"># TDD — test written BEFORE implementation</span>
+<span class="kw">class</span> <span class="cl">TestUserManagement</span>(unittest.TestCase):
+    <span class="kw">def</span> <span class="fn">test_register_stores_hashed_password</span>(self):
+        u = self.service.register(<span class="st">"bob"</span>, <span class="st">"bob@edu.com"</span>, <span class="st">"Password1!"</span>)
+        self.assertNotEqual(u._hash, <span class="st">"Password1!"</span>)   <span class="cm"># must never store plain text</span>
+        self.assertTrue(len(u._hash) &gt; <span class="nu">32</span>)</pre>
+
+    <div class="badge-row" style="margin-top:1rem;">
+      <span class="badge pass">21 / 21 passing</span>
+      <span class="badge">artifact3_elearning.py</span>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════
+       ARTIFACT 4 — Dependency Injection
+  ════════════════════════════════════════════════ -->
+  <section class="section" id="artifact4">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Artifact 4 — Dependency Injection &amp; IoC</h2>
+    </div>
+
+    <p style="color:var(--ink-2); margin-bottom:1.25rem;">
+      Refactoring a tightly coupled <code>UserManager</code> to use constructor injection, enabling notification services to be swapped without modifying <code>UserManager</code>.
+    </p>
+
+    <div class="di-diagram">
+      <div class="di-box abstract">NotificationService (ABC)</div>
+      <div class="di-arrow">↙ implements ↓ implements ↘</div>
+      <div class="di-row">
+        <div class="di-box">EmailService</div>
+        <div class="di-box">SMSService</div>
+        <div class="di-box">PushService</div>
+        <div class="di-box">MultiChannel</div>
+      </div>
+      <div class="di-arrow">↑ injected into</div>
+      <div class="di-box">UserManager(notifier: NotificationService)</div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <h3>IoC Container (pure stdlib)</h3>
+      <p>A lightweight <code>DIContainer</code> class registers service factories and resolves them on demand, supporting singleton and transient lifetimes — replicating the core behaviour of <code>dependency-injector</code> without any external packages.</p>
+    </div>
+
+<pre><span class="cm"># Before — tightly coupled</span>
+<span class="kw">class</span> <span class="cl">UserManager</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.notifier = <span class="cl">EmailService</span>()   <span class="cm"># ← hidden dependency, untestable</span>
+
+<span class="cm"># After — constructor injection</span>
+<span class="kw">class</span> <span class="cl">UserManager</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, notifier: <span class="cl">NotificationService</span>):
+        self._notifier = notifier           <span class="cm"># ← injected; swap without editing class</span>
+
+<span class="cm"># Test — no real email sent</span>
+<span class="kw">def</span> <span class="fn">test_register_sends_welcome_notification</span>(self):
+    mock = <span class="cl">MockNotificationService</span>()
+    mgr  = <span class="cl">UserManager</span>(notifier=mock)   <span class="cm"># inject mock</span>
+    mgr.register_user(<span class="st">"alice"</span>)
+    self.assertEqual(len(mock.calls), <span class="nu">1</span>)
+    self.assertIn(<span class="st">"Welcome"</span>, mock.calls[<span class="nu">0</span>][<span class="nu">1</span>])</pre>
+
+    <div class="badge-row" style="margin-top:1rem;">
+      <span class="badge pass">10 / 10 passing</span>
+      <span class="badge">artifact4_di.py</span>
+    </div>
+  </section>
+
+  <!-- ── Final summary ── -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Summary &amp; Reflection</h2>
+    </div>
+
+    <div class="card">
+      <h3>What was achieved</h3>
+      <p>All five deliverables have been implemented, documented, and tested. The codebase contains <strong>57 passing unit tests</strong> across four test suites, covering normal paths, edge cases, and concurrent correctness.</p>
+    </div>
+
+    <div class="card">
+      <h3>Key design decisions</h3>
+      <p><strong>RLock over Lock</strong> — reentrant locking prevents self-deadlock when internal methods call one another. <strong>Lock ordering</strong> in <code>transfer()</code> eliminates deadlock by ensuring consistent lock-acquisition order system-wide. <strong>Constructor injection</strong> throughout the codebase makes every class independently testable with zero test doubles required for dependencies not under test.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="val">57</span><span class="lbl">Total tests — 0 failures</span></div>
+      <div class="stat"><span class="val">5</span><span class="lbl">Deliverables</span></div>
+      <div class="stat"><span class="val">~900</span><span class="lbl">Lines of documented Python</span></div>
+    </div>
+  </section>
+
+</div>
+
+<footer>Advanced OOP · GitHub E-Portfolio · Python 3.12 · All tests passing</footer>
+
+</body>
+</html>
