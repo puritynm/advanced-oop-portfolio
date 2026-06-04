@@ -1,5 +1,5 @@
 """
-Artifact 1: SOLID Principles — Online Shopping System
+Artifact 1: SOLID Principles: Online Shopping System
 =======================================================
 Module: Advanced Object-Oriented Programming
 
